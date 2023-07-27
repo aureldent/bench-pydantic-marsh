@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "bench-pydantic-marsh"
+version = "0.1.0"
+description = ""
+authors = ["Aurélien Dentan <aurelien@lumapps.com>"]
+readme = "README.md"
+packages = [{include = "bench_pydantic_marsh"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+richbench = "^1.0.3"
+pydantic = "^2.1.1"
+marshmallow = "^3.20.1"
+orjson = "^3.9.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
