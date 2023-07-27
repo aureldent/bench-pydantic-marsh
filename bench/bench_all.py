@@ -114,7 +114,6 @@ def deserialize_with_pyandtic_standard():
 def serialize_with_pyandtic_standard():
     return PYDANTIC_USER.model_dump_json()
 
-
 ###
 # json
 ##
@@ -133,6 +132,8 @@ def dump_json_orjson():
 __benchmarks__ = [
     (deserialize_with_marshmallow, deserialize_with_pyandtic_standard, "marshmallow vs pydantic deserialize"),
     (serialize_with_marshmallow, serialize_with_pyandtic_standard, "marshmallow vs pydantic serialize"),
+    (deserialize_with_marshmallow, deserialize_with_pyandtic_dataclass_type_adapter,  "marshmallow vs pydantic type adapter deserialize"),
+    (serialize_with_marshmallow, serialize_with_pyandtic_dataclass_type_adapter, "marshmallow vs pydantic type adapter serialize"),
     (load_json_standard, load_json_orjson, "json vs orjson loads"),
     (dump_json_standard, dump_json_orjson, "json vs orjson dumps")
 ]
