@@ -114,6 +114,49 @@ def deserialize_with_pyandtic_standard():
 def serialize_with_pyandtic_standard():
     return PYDANTIC_USER.model_dump_json()
 
+##########
+# msgspec
+##########
+import msgspec
+
+class InfoMsgspec(msgspec.Struct):
+    tag: str
+
+class OrgMsgspec(msgspec.Struct):
+    id: str
+    status: Status
+    info: InfoMsgspec
+    super_id: UUID
+
+class BasicUserMqgspec(msgspec.Struct):
+    email: str
+    id: int
+    is_admin: bool = msgspec.field(name="isAdmin")
+    orgs: list[OrgMsgspec]
+
+
+MSGSPEC_ORG = OrgMsgspec(
+    id="2002",
+    status=Status.LIVE,
+    info=InfoMsgspec(
+        tag= "tag"
+    ),
+    super_id=uuid4()
+)
+    
+MSGSPEC_USER = BasicUserMqgspec(
+    email = "test@test.com",
+    id = 100,
+    is_admin = True,
+    orgs=[MSGSPEC_ORG] * 10
+)
+
+def deserialize_with_msg_spec():
+    return msgspec.json.decode(BASIC_USER_STRING, type=BasicUserMqgspec)
+
+def serialize_with_msg_spec():
+    return msgspec.json.encode(MSGSPEC_USER)
+
 ###
 # json
 ##
@@ -132,8 +175,8 @@ def dump_json_orjson():
 __benchmarks__ = [
     (deserialize_with_marshmallow, deserialize_with_pyandtic_standard, "marshmallow vs pydantic deserialize"),
     (serialize_with_marshmallow, serialize_with_pyandtic_standard, "marshmallow vs pydantic serialize"),
-    (deserialize_with_marshmallow, deserialize_with_pyandtic_dataclass_type_adapter,  "marshmallow vs pydantic type adapter deserialize"),
-    (serialize_with_marshmallow, serialize_with_pyandtic_dataclass_type_adapter, "marshmallow vs pydantic type adapter serialize"),
+    (deserialize_with_pyandtic_standard, deserialize_with_msg_spec, "pydantic vs msgspec deser"),
+    (serialize_with_pyandtic_standard, serialize_with_msg_spec, "pydantic vs msgspec ser"),
     (load_json_standard, load_json_orjson, "json vs orjson loads"),
-    (dump_json_standard, dump_json_orjson, "json vs orjson dumps")
+    (dump_json_standard, dump_json_orjson, "json vs orjson dumps"),
 ]

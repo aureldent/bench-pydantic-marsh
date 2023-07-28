@@ -1,7 +1,6 @@
-import json, sys
+import json
 from uuid import UUID, uuid4
 
-from dataclasses import dataclass, field
 from enum import Enum
 
 import tracemalloc
@@ -33,44 +32,43 @@ def main():
 
     BASIC_USER_STRING = json.dumps(BASIC_USER)
 
-    ##############
-    # Marshmallow
-    ##############
+    ##########
+    # msgspec
+    ##########
+    import msgspec
 
-    @dataclass
-    class Info:
+    class InfoMsgspec(msgspec.Struct):
         tag: str
 
-    @dataclass
-    class OrgMarsh:
+    class OrgMsgspec(msgspec.Struct):
         id: str
-        status: Status =  field(
-            metadata={"by_value": True}
-        )
-        info: Info
+        status: Status
+        info: InfoMsgspec
         super_id: UUID
 
-    @dataclass
-    class BasicUserMarsh:
+    class BasicUserMqgspec(msgspec.Struct):
         email: str
         id: int
-        is_admin: bool = field(metadata={"data_key": "isAdmin"})
-        orgs: list[OrgMarsh]
+        is_admin: bool = msgspec.field(name="isAdmin")
+        orgs: list[OrgMsgspec]
         ids: list[int]
         names: list[str]
 
-    MARSH_ORG = OrgMarsh(
+
+    MSGSPEC_ORG = OrgMsgspec(
         id="2002",
         status=Status.LIVE,
-        info=Info(tag="tag"),
+        info=InfoMsgspec(
+            tag= "tag"
+        ),
         super_id=uuid4()
     )
         
-    MARSHMALLOW_USER = BasicUserMarsh(
+    MSGSPEC_USER = BasicUserMqgspec(
         email = "test@test.com",
         id = 100,
         is_admin = True,
-        orgs=[MARSH_ORG] * N_ELEM_ARRAY,
+        orgs=[MSGSPEC_ORG] * N_ELEM_ARRAY,
         ids=[i for i in range(N_ELEM_ARRAY)],
         names=[f"n_{i}" for i in range(N_ELEM_ARRAY)]
     )
@@ -79,8 +77,7 @@ def main():
     total_bytes = sum(stat.size for stat in snapshot.statistics('lineno'))
     # convert to kb
     total_kb = total_bytes / 1024.0
-    print(f"Marhsh cosumes {total_kb} kb")
-
+    print(f"Msgspec cosumes {total_kb} kb")
 
 if __name__ == "__main__":
     main()

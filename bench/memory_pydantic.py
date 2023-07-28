@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 import tracemalloc
 
+N_ELEM_ARRAY = 50
 
 def main():
     tracemalloc.start()
@@ -27,7 +28,9 @@ def main():
         "email": "test@test.com",
         "id": 100,
         "isAdmin": True,
-        "orgs": [BASIC_ORG] * 10
+        "orgs": [BASIC_ORG] * N_ELEM_ARRAY,
+        "ids": [i for i in range(N_ELEM_ARRAY)],
+        "names": [f"n_{i}" for i in range(N_ELEM_ARRAY)]
     }
 
     BASIC_USER_STRING = json.dumps(BASIC_USER)
@@ -62,15 +65,14 @@ def main():
         ),
         super_id=uuid4()
     )
-
         
     PYDANTIC_USER = BasicUserPydantic(
         email = "test@test.com",
         id = 100,
         isAdmin = True,
-        orgs=[PYDANTIC_ORG] * 50,
-        ids=[i for i in range(50)],
-        names=[f"n_{i}" for i in range(30)]
+        orgs=[PYDANTIC_ORG] * N_ELEM_ARRAY,
+        ids=[i for i in range(N_ELEM_ARRAY)],
+        names=[f"n_{i}" for i in range(N_ELEM_ARRAY)]
     )
     snapshot = tracemalloc.take_snapshot()
     total_bytes = sum(stat.size for stat in snapshot.statistics('lineno'))
