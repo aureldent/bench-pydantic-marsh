@@ -8,6 +8,7 @@ from enum import Enum
 from marshmallow_dataclass import class_schema
 from pydantic import BaseModel, Field
 
+NB_ORGS = 100
 class Status(Enum):
     LIVE = "live"
 
@@ -24,7 +25,7 @@ BASIC_USER = {
     "email": "test@test.com",
     "id": 100,
     "isAdmin": True,
-    "orgs": [BASIC_ORG] * 10
+    "orgs": [BASIC_ORG] * NB_ORGS
 }
 
 BASIC_USER_STRING = json.dumps(BASIC_USER)
@@ -64,7 +65,7 @@ MARSHMALLOW_USER = BasicUserMarsh(
     email = "test@test.com",
     id = 100,
     is_admin = True,
-    orgs=[MARSH_ORG] * 10
+    orgs=[MARSH_ORG] * NB_ORGS
 )
 
 def deserialize_with_marshmallow():
@@ -105,7 +106,7 @@ PYDANTIC_USER = BasicUserPydantic(
     email = "test@test.com",
     id = 100,
     isAdmin = True,
-    orgs=[PYDANTIC_ORG] * 10
+    orgs=[PYDANTIC_ORG] * NB_ORGS
 )
 
 def deserialize_with_pyandtic_standard():
@@ -148,7 +149,7 @@ MSGSPEC_USER = BasicUserMqgspec(
     email = "test@test.com",
     id = 100,
     is_admin = True,
-    orgs=[MSGSPEC_ORG] * 10
+    orgs=[MSGSPEC_ORG] * NB_ORGS
 )
 
 def deserialize_with_msg_spec():
@@ -173,10 +174,12 @@ def dump_json_orjson():
     return orjson.dumps(BASIC_USER)
 
 __benchmarks__ = [
-    (deserialize_with_marshmallow, deserialize_with_pyandtic_standard, "marshmallow vs pydantic deserialize"),
-    (serialize_with_marshmallow, serialize_with_pyandtic_standard, "marshmallow vs pydantic serialize"),
-    (deserialize_with_pyandtic_standard, deserialize_with_msg_spec, "pydantic vs msgspec deser"),
-    (serialize_with_pyandtic_standard, serialize_with_msg_spec, "pydantic vs msgspec ser"),
-    (load_json_standard, load_json_orjson, "json vs orjson loads"),
-    (dump_json_standard, dump_json_orjson, "json vs orjson dumps"),
+    (deserialize_with_marshmallow, deserialize_with_pyandtic_standard, "pydantic instead of pydantic: deserialize"),
+    (serialize_with_marshmallow, serialize_with_pyandtic_standard, "pydantic instead of pydantic: serialize"),
+    (deserialize_with_pyandtic_standard, deserialize_with_msg_spec, "msgspec instead of pydantic: deserialize"),
+    (serialize_with_pyandtic_standard, serialize_with_msg_spec, "msgspec instead of pydantic: serialize"),
+    (deserialize_with_marshmallow, deserialize_with_msg_spec, "msgspec instead of marsh: deserialize"),
+    (serialize_with_marshmallow, serialize_with_msg_spec, "msgspec instead of marsh: serialize"),
+    (load_json_standard, load_json_orjson, "orjson instead of json: loads"),
+    (dump_json_standard, dump_json_orjson, "orjson instead of json: dumps"),
 ]
