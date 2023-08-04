@@ -174,12 +174,12 @@ def dump_json_orjson():
     return orjson.dumps(BASIC_USER)
 
 __benchmarks__ = [
-    (deserialize_with_marshmallow, deserialize_with_pyandtic_standard, "pydantic instead of pydantic: deserialize"),
-    (serialize_with_marshmallow, serialize_with_pyandtic_standard, "pydantic instead of pydantic: serialize"),
+    (deserialize_with_marshmallow, deserialize_with_pyandtic_standard, "pydantic instead of marshmallow: deserialize"),
+    (serialize_with_marshmallow, serialize_with_pyandtic_standard, "pydantic instead of marshmallow: serialize"),
     (deserialize_with_pyandtic_standard, deserialize_with_msg_spec, "msgspec instead of pydantic: deserialize"),
     (serialize_with_pyandtic_standard, serialize_with_msg_spec, "msgspec instead of pydantic: serialize"),
-    (deserialize_with_marshmallow, deserialize_with_msg_spec, "msgspec instead of marsh: deserialize"),
-    (serialize_with_marshmallow, serialize_with_msg_spec, "msgspec instead of marsh: serialize"),
+    (deserialize_with_marshmallow, deserialize_with_msg_spec, "msgspec instead of marshmallow: deserialize"),
+    (serialize_with_marshmallow, serialize_with_msg_spec, "msgspec instead of marshmallow: serialize"),
     (load_json_standard, load_json_orjson, "orjson instead of json: loads"),
     (dump_json_standard, dump_json_orjson, "orjson instead of json: dumps"),
 ]
