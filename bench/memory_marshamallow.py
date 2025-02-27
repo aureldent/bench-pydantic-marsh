@@ -79,7 +79,7 @@ def main():
     total_bytes = sum(stat.size for stat in snapshot.statistics('lineno'))
     # convert to kb
     total_kb = total_bytes / 1024.0
-    print(f"Marhsh cosumes {total_kb} kb")
+    print(f"Marshmallow cosumes {total_kb} kb")
 
 
 if __name__ == "__main__":
