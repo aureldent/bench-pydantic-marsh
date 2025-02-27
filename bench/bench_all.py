@@ -147,7 +147,7 @@ MSGSPEC_ORG = OrgMsgspec(
     
 MSGSPEC_USER = BasicUserMqgspec(
     email = "test@test.com",
-    id = 100,
+    id = 1000,
     is_admin = True,
     orgs=[MSGSPEC_ORG] * NB_ORGS
 )
@@ -180,6 +180,4 @@ __benchmarks__ = [
     (serialize_with_pyandtic_standard, serialize_with_msg_spec, "msgspec instead of pydantic: serialize"),
     (deserialize_with_marshmallow, deserialize_with_msg_spec, "msgspec instead of marshmallow: deserialize"),
     (serialize_with_marshmallow, serialize_with_msg_spec, "msgspec instead of marshmallow: serialize"),
-    (load_json_standard, load_json_orjson, "orjson instead of json: loads"),
-    (dump_json_standard, dump_json_orjson, "orjson instead of json: dumps"),
 ]
